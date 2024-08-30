@@ -1,0 +1,1243 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Picker with Slots</title>
+</head>
+
+<body>
+
+  <h3>Select a Date:</h3>
+  <input type="date" id="date-picker" name="date-picker">
+
+  <h3>Available Slots:</h3>
+  <div id="slots-container">
+    Slots will be displayed here
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Sample slots data for each date
+    var slotsData = {
+      "2024-08-23": { "slot1": 100, "slot2": 100, "slot3": 100 },
+      "2024-08-24": { "slot1": 100, "slot2": 100, "slot3": 100 },
+      // Add more dates as needed
+    };
+
+    // Handle date change event
+    $('#date-picker').on('change', function () {
+      var selectedDate = $(this).val();
+      updateSlots(selectedDate);
+    });
+
+    // Function to update slots based on the selected date
+    function updateSlots(date) {
+      $('#slots-container').empty(); // Clear previous slots
+
+      if (slotsData[date]) {
+        $.each(slotsData[date], function (slot, seats) {
+          $('#slots-container').append(
+            '<div>' +
+            slot + ' - Available Seats: ' + seats +
+            ' <button onclick="bookSeat(\'' + date + '\', \'' + slot + '\')">Book Seat</button>' +
+            '</div>'
+          );
+        });
+      } else {
+        $('#slots-container').append('<p>No slots available for this date.</p>');
+      }
+    }
+
+    // Function to book a seat
+    function bookSeat(date, slot) {
+      if (slotsData[date][slot] > 0) {
+        slotsData[date][slot]--;
+        updateSlots(date); // Refresh the slots display
+        alert('Seat booked successfully!');
+      } else {
+        alert('No seats available in this slot.');
+      }
+    }
+  </script>
+
+</body>
+
+</html> -->
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar with Slot Selection</title>
+  <style>
+    .slot {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      background-color: #f0f0f0;
+    }
+
+    .slot.selected {
+      background-color: #87ceeb;
+    }
+  </style>
+</head>
+
+<body>
+
+  <label for="date-picker">Select a Date:</label>
+  <input type="date" id="date-picker" name="date-picker" min="">
+  <p id="selected-date"></p>
+
+  <div id="slots-container">
+    Slots will be displayed here
+  </div>
+
+  <script>
+    // Get today's date and format it
+    var today = new Date();
+    var day = String(today.getDate()).padStart(2, '0');
+    var month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0
+    var year = today.getFullYear();
+    var currentDate = year + '-' + month + '-' + day;
+
+    // Set the min date attribute of the date picker to today's date
+    var datePicker = document.getElementById('date-picker');
+    datePicker.setAttribute('min', currentDate);
+
+    // Add 5 days to the current date for the date picker max limit
+    var maxDate = new Date();
+    maxDate.setDate(today.getDate() + 5);
+    var maxDay = String(maxDate.getDate()).padStart(2, '0');
+    var maxMonth = String(maxDate.getMonth() + 1).padStart(2, '0');
+    var maxYear = maxDate.getFullYear();
+    var maxDateFormatted = maxYear + '-' + maxMonth + '-' + maxDay;
+    datePicker.setAttribute('max', maxDateFormatted);
+
+    // Example slots per date
+    var slotsPerDate = {
+      '2024-08-23': 100,
+      '2024-08-24': 100,
+      '2024-08-25': 100,
+      '2024-08-26': 100,
+      '2024-08-27': 100
+    };
+
+    // Function to display slots
+    function displaySlots(date) {
+      var slotsContainer = document.getElementById('slots-container');
+      slotsContainer.innerHTML = ''; // Clear previous slots
+
+      if (slotsPerDate[date]) {
+        var totalSlots = slotsPerDate[date];
+        for (var i = 1; i <= totalSlots; i++) {
+          var slot = document.createElement('div');
+          slot.className = 'slot';
+          slot.innerText = 'Slot ' + i;
+          slot.setAttribute('data-slot', i);
+          slot.addEventListener('click', function () {
+            selectSlot(date, this.getAttribute('data-slot'));
+          });
+          slotsContainer.appendChild(slot);
+        }
+      } else {
+        slotsContainer.innerText = 'No slots available for this date.';
+      }
+    }
+
+    // Function to handle slot selection
+    function selectSlot(date, slotNumber) {
+      // Reduce the slot count
+      slotsPerDate[date]--;
+
+      // Disable the selected slot
+      var slots = document.querySelectorAll('.slot');
+      slots.forEach(function (slot) {
+        if (slot.getAttribute('data-slot') == slotNumber) {
+          slot.classList.add('selected');
+          slot.style.pointerEvents = 'none';
+        }
+      });
+
+      // Update slot availability
+      displaySlots(date);
+    }
+
+    // Event listener for date selection
+    datePicker.addEventListener('change', function () {
+      var selectedDate = datePicker.value;
+      document.getElementById('selected-date').innerText = "You selected: " + selectedDate;
+      displaySlots(selectedDate);
+    });
+  </script>
+
+</body>
+
+</html> -->
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Booking Calendar</title>
+  <style>
+    .slot {
+      display: inline-block;
+      padding: 10px;
+      margin: 5px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .slot.selected {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .slot.disabled {
+      background-color: #d3d3d3;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Select a Date and Slot</h2>
+
+  <label for="date-picker">Select a Date:</label>
+  <input type="date" id="date-picker" name="date-picker" min="">
+  <p id="slot-info"></p>
+
+  <div id="slots-container"></div>
+
+  <script>
+    // Generate today's date and the next five days
+    var today = new Date();
+    var day = String(today.getDate()).padStart(2, '0');
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var year = today.getFullYear();
+
+    var minDate = year + '-' + month + '-' + day;
+    document.getElementById('date-picker').setAttribute('min', minDate);
+
+    // Generate the next five days for the date picker
+    var maxDate = new Date();
+    maxDate.setDate(today.getDate() + 5);
+    var maxDay = String(maxDate.getDate()).padStart(2, '0');
+    var maxMonth = String(maxDate.getMonth() + 1).padStart(2, '0');
+    var maxYear = maxDate.getFullYear();
+    var maxDateStr = maxYear + '-' + maxMonth + '-' + maxDay;
+
+    document.getElementById('date-picker').setAttribute('max', maxDateStr);
+
+    // Slots availability per date
+    var slotsPerDay = {
+      // Simulate initial slots for each day (100 available for each date)
+      '2024-08-23': 100,
+      '2024-08-24': 100,
+      '2024-08-25': 100,
+      '2024-08-26': 100,
+      '2024-08-27': 100,
+    };
+
+    // Handle date selection
+    document.getElementById('date-picker').addEventListener('change', function () {
+      var selectedDate = this.value;
+      updateSlots(selectedDate);
+    });
+
+    function updateSlots(selectedDate) {
+      var slotsContainer = document.getElementById('slots-container');
+      slotsContainer.innerHTML = '';  // Clear previous slots
+
+      if (slotsPerDay[selectedDate] > 0) {
+        for (var i = 1; i <= slotsPerDay[selectedDate]; i++) {
+          var slot = document.createElement('div');
+          slot.classList.add('slot');
+          slot.textContent = 'Slot ' + i;
+          slot.addEventListener('click', function () {
+            this.classList.toggle('selected');
+            slotsPerDay[selectedDate]--;
+            updateSlotInfo(selectedDate);
+          });
+          slotsContainer.appendChild(slot);
+        }
+      } else {
+        slotsContainer.innerHTML = '<p>No slots available for this date.</p>';
+      }
+      updateSlotInfo(selectedDate);
+    }
+
+    function updateSlotInfo(date) {
+      document.getElementById('slot-info').textContent = 'Available slots for ' + date + ': ' + slotsPerDay[date];
+    }
+
+  </script>
+
+</body>
+
+</html> -->
+
+
+<!-- 
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      background-color: #fff;
+      margin: 0 auto;
+      width: 500px;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .calendar-day {
+      text-align: center;
+      padding: 10px;
+      background-color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .calendar-day.available {
+      background-color: #b0e0e6;
+    }
+
+    .calendar-day.selected {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .calendar-day.disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Select Visit Date</h1>
+    <h2>• Available Slots</h2>
+    <p>Bengaluru • 1 Adults • 1 Kids • 1 Infants •</p>
+
+    <div class="calendar">
+      <h2>August 2024</h2>
+      <div class="calendar-day">Sun</div>
+      <div class="calendar-day">Mon</div>
+      <div class="calendar-day">Tue</div>
+      <div class="calendar-day">Wed</div>
+      <div class="calendar-day">Thu</div>
+      <div class="calendar-day">Fri</div>
+      <div class="calendar-day">Sat</div>
+      <div class="calendar-day">28</div>
+      <div class="calendar-day">29</div>
+      <div class="calendar-day">30</div>
+      <div class="calendar-day">31</div>
+      <div class="calendar-day">1</div>
+      <div class="calendar-day">2</div>
+      <div class="calendar-day">3</div>
+      <div class="calendar-day">4</div>
+      <div class="calendar-day">5</div>
+      <div class="calendar-day">6</div>
+      <div class="calendar-day">7</div>
+      <div class="calendar-day">8</div>
+      <div class="calendar-day">9</div>
+      <div class="calendar-day">10</div>
+      <div class="calendar-day">11</div>
+      <div class="calendar-day">12</div>
+      <div class="calendar-day">13</div>
+      <div class="calendar-day">14</div>
+      <div class="calendar-day">15</div>
+      <div class="calendar-day">16</div>
+      <div class="calendar-day">17</div>
+      <div class="calendar-day">18</div>
+      <div class="calendar-day">19</div>
+      <div class="calendar-day">20</div>
+      <div class="calendar-day">21</div>
+      <div class="calendar-day">22</div>
+      <div class="calendar-day">23</div>
+      <div class="calendar-day">24</div>
+      <div class="calendar-day">25</div>
+      <div class="calendar-day">26</div>
+      <div class="calendar-day available" data-date="2024-08-27">27<br>98</div>
+      <div class="calendar-day available" data-date="2024-08-28">28<br>97</div>
+      <div class="calendar-day available" data-date="2024-08-29">29<br>96</div>
+      <div class="calendar-day available" data-date="2024-08-30">30<br>100</div>
+      <div class="calendar-day available" data-date="2024-08-31">31<br>90</div>
+      <div class="calendar-day">1<br>99</div>
+      <div class="calendar-day">2<br>100</div>
+      <div class="calendar-day">3<br>100</div>
+      <div class="calendar-day">4<br>100</div>
+      <div class="calendar-day">5<br>100</div>
+      <div class="calendar-day">6<br>100</div>
+      <div class="calendar-day">7<br>99</div>
+    </div>
+
+    <button>Continue</button>
+  </div>
+
+</body>
+
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar Booking System</title>
+  <style>
+    .slot {
+      display: inline-block;
+      padding: 10px;
+      margin: 5px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .slot.selected {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .slot.disabled {
+      background-color: #d3d3d3;
+      cursor: not-allowed;
+    }
+
+    #slots-container {
+      margin-top: 20px;
+    }
+
+    #seat-info {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Calendar Booking System</h2>
+
+  <label for="date-picker">Select a Date:</label>
+  <input type="date" id="date-picker" name="date-picker" min="">
+
+  <div id="slots-container"></div>
+  <p id="seat-info"></p>
+
+  <script>
+    // Generate today's date and the next five days
+    var today = new Date();
+    var day = String(today.getDate()).padStart(2, '0');
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var year = today.getFullYear();
+
+    var minDate = year + '-' + month + '-' + day;
+    document.getElementById('date-picker').setAttribute('min', minDate);
+
+    // Generate the next five days for the date picker
+    var maxDate = new Date();
+    maxDate.setDate(today.getDate() + 5);
+    var maxDay = String(maxDate.getDate()).padStart(2, '0');
+    var maxMonth = String(maxDate.getMonth() + 1).padStart(2, '0');
+    var maxYear = maxDate.getFullYear();
+    var maxDateStr = maxYear + '-' + maxMonth + '-' + maxDay;
+
+    document.getElementById('date-picker').setAttribute('max', maxDateStr);
+
+    // Initialize seat availability
+    var seatsPerDay = {
+      // Simulate initial 100 seats for each date
+      '2024-08-23': 100,
+      '2024-08-24': 100,
+      '2024-08-25': 100,
+      '2024-08-26': 100,
+      '2024-08-27': 100,
+    };
+
+    // Handle date selection
+    document.getElementById('date-picker').addEventListener('change', function () {
+      var selectedDate = this.value;
+      updateSlots(selectedDate);
+    });
+
+    function updateSlots(selectedDate) {
+      var slotsContainer = document.getElementById('slots-container');
+      slotsContainer.innerHTML = '';  // Clear previous slots
+
+      if (seatsPerDay[selectedDate] > 0) {
+        for (var i = 1; i <= seatsPerDay[selectedDate]; i++) {
+          var slot = document.createElement('div');
+          slot.classList.add('slot');
+          slot.textContent = 'Seat ' + i;
+          slot.addEventListener('click', function () {
+            this.classList.add('selected');
+            seatsPerDay[selectedDate]--;
+            updateSeatInfo(selectedDate);
+            disableSelectedSlots(selectedDate);
+          });
+          slotsContainer.appendChild(slot);
+        }
+      } else {
+        slotsContainer.innerHTML = '<p>No seats available for this date.</p>';
+      }
+      updateSeatInfo(selectedDate);
+    }
+
+    function updateSeatInfo(date) {
+      document.getElementById('seat-info').textContent = 'Available seats for ' + date + ': ' + seatsPerDay[date];
+    }
+
+    function disableSelectedSlots(selectedDate) {
+      var allSlots = document.querySelectorAll('#slots-container .slot');
+      allSlots.forEach(function (slot) {
+        slot.classList.add('disabled');
+        slot.removeEventListener('click', function () { }); // Disable further clicking
+      });
+    }
+
+  </script>
+
+</body>
+
+
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar Booking System</title>
+  <style>
+    #date-picker {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #available-seats {
+      font-weight: bold;
+      margin-top: 10px;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Calendar Booking System</h2> 
+
+  <label for="date-picker">Select a Date:</label>
+  <input type="date" id="date-picker" name="date-picker" min="">
+  <p id="available-seats"></p>
+
+  <script>
+    // Initialize today's date and the next five days for the date picker
+    var today = new Date();
+    var day = String(today.getDate()).padStart(2, '0');
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var year = today.getFullYear();
+
+    var minDate = year + '-' + month + '-' + day;
+    document.getElementById('date-picker').setAttribute('min', minDate);
+
+    var maxDate = new Date();
+    maxDate.setDate(today.getDate() + 360);
+    var maxDay = String(maxDate.getDate()).padStart(2, '0');
+    var maxMonth = String(maxDate.getMonth() + 1).padStart(2, '0');
+    var maxYear = maxDate.getFullYear();
+    var maxDateStr = maxYear + '-' + maxMonth + '-' + maxDay;
+
+    document.getElementById('date-picker').setAttribute('max', maxDateStr);
+
+    // Slots availability per date (100 seats for each date)
+    var slotsPerDay = {};
+
+    for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+      var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      slotsPerDay[dateStr] = 100; // Set 100 slots for each date
+    }
+
+    // Handle date selection
+    document.getElementById('date-picker').addEventListener('change', function () {
+      var selectedDate = this.value;
+      if (slotsPerDay[selectedDate] > 0) {
+        slotsPerDay[selectedDate]--;
+        updateAvailableSeats(selectedDate);
+      } else {
+        alert('No seats available for this date.');
+      }
+    });
+
+    function updateAvailableSeats(date) {
+      document.getElementById('available-seats').textContent = 'Available seats for ' + date + ': ' + slotsPerDay[date];
+    }
+
+    // Automatically update available seats on page load
+    document.getElementById('date-picker').addEventListener('input', function () {
+      var selectedDate = this.value;
+      updateAvailableSeats(selectedDate);
+    });
+
+  </script>
+
+</body>
+
+</html> -->
+<!-- <html>
+
+<head>
+  <title>JQuery DatePicker</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script>
+    $(function () {
+      $("#txtDate").datepicker();
+    });
+  </script>
+</head>
+
+<body>
+  <div>
+    Select Date: <input type="text" id="txtDate" />
+  </div>
+</body>
+
+</html> -->
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Picker with Disabled Past Dates</title>
+</head>
+
+<body>
+
+  <h2>Date Picker with Disabled Past Dates</h2>
+
+  <label for="date-picker">Select a Date:</label>
+  <input type="date" id="date-picker" name="date-picker" min="">
+
+  <script>
+    // Get today's date
+    var today = new Date();
+    var day = String(today.getDate()).padStart(2, '0');
+    var month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0
+    var year = today.getFullYear();
+
+    // Format the date in YYYY-MM-DD format
+    var currentDate = year + '-' + month + '-' + day;
+
+    // Set the min attribute of the date picker to today's date
+    document.getElementById('date-picker').setAttribute('min', currentDate);
+  </script>
+
+</body>
+
+</html> -->
+
+
+<!-- <script>
+  // Initialize today's date and the next five days for the date picker
+  var today = new Date();
+  var day = String(today.getDate()).padStart(2, '0');
+  var month = String(today.getMonth() + 1).padStart(2, '0');
+  var year = today.getFullYear();
+
+  var minDate = year + '-' + month + '-' + day;
+  document.getElementById('date-picker').setAttribute('min', minDate);
+
+  //personal
+  var datePicker = document.getElementById('date-picker');
+  datePicker.addEventListener('change', function () {
+    var selectedDate = datePicker.value;
+    // Display the selected date in the text box
+    document.getElementById('selected-date').value = selectedDate;
+    updateAvailableSeats(selectedDate);
+  });
+
+  var maxDate = new Date();
+  maxDate.setDate(today.getDate() + 360);
+  var maxDay = String(maxDate.getDate()).padStart(2, '0');
+  var maxMonth = String(maxDate.getMonth() + 1).padStart(2, '0');
+  var maxYear = maxDate.getFullYear();
+  var maxDateStr = maxYear + '-' + maxMonth + '-' + maxDay;
+
+  document.getElementById('date-picker').setAttribute('max', maxDateStr);
+
+  // Slots availability per date (100 seats for each date)
+  var slotsPerDay = {};
+
+  for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+    var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    slotsPerDay[dateStr] = 100; // Set 100 slots for each date
+  }
+
+  // Handle date selection
+  datePicker.addEventListener('change', function () {
+    var selectedDate = this.value;
+    if (slotsPerDay[selectedDate] > 0) {
+      slotsPerDay[selectedDate]--;
+      updateAvailableSeats(selectedDate);
+    } else {
+      alert('Aaje aa date ma koi seat available nathi.');
+    }
+  });
+
+  function updateAvailableSeats(date) {
+    if (slotsPerDay[date]) {
+      document.getElementById('available-seats').textContent = 'Available seats for ' + date + ': ' + slotsPerDay[date];
+    } else {
+      document.getElementById('available-seats').textContent = 'Koi seats available nathi.';
+    }
+  }
+
+  // Automatically update available seats on page load or date change
+  datePicker.addEventListener('input', function () {
+    var selectedDate = this.value;
+    updateAvailableSeats(selectedDate);
+  });
+</script> -->
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar Booking System</title>
+</head>
+
+<body>
+  <input type="date" id="date-picker">
+  <p id="available-seats">Available seats: </p>
+
+  <script>
+    // Initialize today's date
+    var today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to midnight to avoid issues with timezones
+    var day = String(today.getDate()).padStart(2, '0');
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var year = today.getFullYear();
+
+    var minDate = year + '-' + month + '-' + day;
+    document.getElementById('date-picker').setAttribute('min', minDate);
+
+    var maxDate = new Date();
+    maxDate.setDate(today.getDate() + 360);
+    var maxDay = String(maxDate.getDate()).padStart(2, '0');
+    var maxMonth = String(maxDate.getMonth() + 1).padStart(2, '0');
+    var maxYear = maxDate.getFullYear();
+    var maxDateStr = maxYear + '-' + maxMonth + '-' + maxDay;
+
+    document.getElementById('date-picker').setAttribute('max', maxDateStr);
+
+    // Slots availability per date (100 seats for each date)
+    var slotsPerDay = {};
+
+    for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+      var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      slotsPerDay[dateStr] = 100; // Set 100 slots for each date
+    }
+
+    // Handle date selection
+    document.getElementById('date-picker').addEventListener('change', function () {
+      var selectedDate = this.value;
+
+      if (slotsPerDay[selectedDate] > 0) {
+        slotsPerDay[selectedDate]--;
+        updateAvailableSeats(selectedDate);
+
+        // Disable date if no seats are available
+        if (slotsPerDay[selectedDate] === 0) {
+          disableDate(selectedDate);
+        }
+      } else {
+        alert('Aaje aa date ma koi seat available nathi.');
+      }
+    });
+
+    function updateAvailableSeats(date) {
+      if (slotsPerDay[date]) {
+        document.getElementById('available-seats').textContent = 'Available seats for ' + date + ': ' + slotsPerDay[date];
+      } else {
+        document.getElementById('available-seats').textContent = 'Koi seats available nathi.';
+      }
+    }
+
+    function disableDate(date) {
+      var dateInput = document.getElementById('date-picker');
+      var disabledDates = dateInput.getAttribute('disabled-dates') || '';
+
+      // Add the date to the list of disabled dates
+      disabledDates += (disabledDates ? ',' : '') + date;
+      dateInput.setAttribute('disabled-dates', disabledDates);
+
+      // Remove the date from the picker
+      var dateOption = document.createElement('option');
+      dateOption.value = date;
+      dateOption.disabled = true;
+      dateInput.appendChild(dateOption);
+    }
+
+    // Disable past dates and update available seats on page load
+    document.getElementById('date-picker').addEventListener('input', function () {
+      var selectedDate = this.value;
+      updateAvailableSeats(selectedDate);
+    });
+
+    // Disable past dates initially
+    function disablePastDates() {
+      var dateInput = document.getElementById('date-picker');
+      var currentDate = new Date(today);
+      for (var d = new Date(minDate); d < currentDate; d.setDate(d.getDate() + 1)) {
+        disableDate(d.toISOString().split('T')[0]);
+      }
+    }
+
+    disablePastDates();
+  </script>
+</body>
+
+</html> -->
+
+<!--important code 6-->
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar Booking System</title>
+  <style>
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .day {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .day.disabled {
+      background-color: #eee;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .seats {
+      font-size: 12px;
+      color: #333;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="calendar-container"></div>
+  <p id="available-seats">Available seats: </p>
+
+  <script>
+    // Initialize today's date
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Slots availability per date (100 seats for each date)
+    var slotsPerDay = {};
+    var maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 360);
+
+    for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+      var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      slotsPerDay[dateStr] = 100; // Set 100 slots for each date
+    }
+
+    // Create calendar grid
+    function generateCalendar() {
+      var calendarContainer = document.getElementById('calendar-container');
+      calendarContainer.innerHTML = ''; // Clear previous content
+      calendarContainer.classList.add('calendar');
+
+      for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+        var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        var dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+
+        if (slotsPerDay[dateStr] === 0) {
+          dayElement.classList.add('disabled');
+        }
+
+        dayElement.innerHTML = `<div>${d.getDate()}/${d.getMonth() + 1}</div><div class="seats">${slotsPerDay[dateStr]} seats</div>`;
+        dayElement.dataset.date = dateStr;
+
+        if (!dayElement.classList.contains('disabled')) {
+          dayElement.addEventListener('click', function () {
+            selectDate(this.dataset.date);
+          });
+        }
+
+        calendarContainer.appendChild(dayElement);
+      }
+    }
+
+    // Handle date selection
+    function selectDate(selectedDate) {
+      if (slotsPerDay[selectedDate] > 0) {
+        slotsPerDay[selectedDate]--;
+        updateAvailableSeats(selectedDate);
+
+        // Refresh calendar to reflect the updated seats
+        generateCalendar();
+      } else {
+        alert('Aaje aa date ma koi seat available nathi.');
+      }
+    }
+
+    function updateAvailableSeats(date) {
+      document.getElementById('available-seats').textContent = 'Available seats for ' + date + ': ' + slotsPerDay[date];
+    }
+
+    generateCalendar(); // Generate calendar on page load
+  </script>
+</body>
+
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Calendar Booking System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #available-seats {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="date" id="date-picker">
+  <p id="available-seats">Available seats: </p>
+
+  <script>
+    // Initialize today's date
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var minDate = today.toISOString().split('T')[0];
+    document.getElementById('date-picker').setAttribute('min', minDate);
+
+    var maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 360);
+    var maxDateStr = maxDate.toISOString().split('T')[0];
+    document.getElementById('date-picker').setAttribute('max', maxDateStr);
+
+    // Slots availability per date (100 seats for each date)
+    var slotsPerDay = {};
+    for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+      var dateStr = d.toISOString().split('T')[0];
+      slotsPerDay[dateStr] = 100; // Set 100 slots for each date
+    }
+
+    // Handle date selection
+    document.getElementById('date-picker').addEventListener('change', function () {
+      var selectedDate = this.value;
+      if (slotsPerDay[selectedDate] > 0) {
+        slotsPerDay[selectedDate]--;
+        updateAvailableSeats(selectedDate);
+
+        // Disable date if no seats are available
+        if (slotsPerDay[selectedDate] === 0) {
+          disableDate(selectedDate);
+        }
+      } else {
+        alert('No seats available for this date.');
+      }
+    });
+
+    function updateAvailableSeats(date) {
+      document.getElementById('available-seats').textContent = 'Available seats for ' + date + ': ' + slotsPerDay[date];
+    }
+
+    function disableDate(date) {
+      var datePicker = document.getElementById('date-picker');
+      var option = document.createElement('option');
+      option.value = date;
+      option.disabled = true;
+      datePicker.appendChild(option);
+    }
+
+    // Disable past dates initially
+    function disablePastDates() {
+      var datePicker = document.getElementById('date-picker');
+      var currentDate = new Date(today);
+      for (var d = new Date(minDate); d < currentDate; d.setDate(d.getDate() + 1)) {
+        disableDate(d.toISOString().split('T')[0]);
+      }
+    }
+
+    disablePastDates();
+  </script>
+</body>
+
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar Booking System</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .calendar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .day {
+      border: 1px solid #ccc;
+      /* padding: 10px; */
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .day.disabled {
+      background-color: #eee;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .seats {
+      font-size: 12px;
+      color: #333;
+      margin-top: 5px;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .nav-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .nav-button:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="calendar-container col-lg-4">
+        <div class="navigation">
+          <button id="prev-month" class="nav-button">&lt; Previous</button>
+          <span id="month-year"></span>
+          <button id="next-month" class="nav-button">Next &gt;</button>
+        </div>
+        <div id="calendar" class="calendar"></div>
+        <p id="available-seats">Available seats: </p>
+        <input type="text" id="selected-date" placeholder="Selected Date" readonly>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var slotsPerDay = {};
+    var maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 360);
+
+    for (var d = new Date(today); d <= maxDate; d.setDate(d.getDate() + 1)) {
+      var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      slotsPerDay[dateStr] = 100;
+    }
+
+    var currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    function generateCalendar() {
+      var calendarContainer = document.getElementById('calendar');
+      calendarContainer.innerHTML = '';
+
+      var firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+      var lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+      var startDate = new Date(firstDay);
+      startDate.setDate(firstDay.getDate() - firstDay.getDay());
+
+      for (var d = startDate; d <= lastDay; d.setDate(d.getDate() + 1)) {
+        var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        var dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+
+        if (d < today || slotsPerDay[dateStr] === 0) {
+          dayElement.classList.add('disabled');
+        }
+
+        dayElement.innerHTML = `<div>${d.getDate()}/${d.getMonth() + 1}</div><div class="seats">${slotsPerDay[dateStr] || 0} seats</div>`;
+        dayElement.dataset.date = dateStr;
+
+        if (!dayElement.classList.contains('disabled')) {
+          dayElement.addEventListener('click', function () {
+            selectDate(this.dataset.date);
+          });
+        }
+
+        calendarContainer.appendChild(dayElement);
+      }
+
+      document.getElementById('month-year').textContent = `${currentMonth.toLocaleString('default', { month: 'long' })} ${currentMonth.getFullYear()}`;
+    }
+
+    function selectDate(selectedDate) {
+      if (slotsPerDay[selectedDate] > 0) {
+        slotsPerDay[selectedDate]--;
+        updateAvailableSeats(selectedDate);
+        document.getElementById('selected-date').value = selectedDate;
+        generateCalendar();
+      } else {
+        alert('No seats available for this date.');
+      }
+    }
+
+    function updateAvailableSeats(date) {
+      document.getElementById('available-seats').textContent = 'Available seats for ' + date + ': ' + slotsPerDay[date];
+    }
+
+    document.getElementById('prev-month').addEventListener('click', function () {
+      currentMonth.setMonth(currentMonth.getMonth() - 1);
+      generateCalendar();
+    });
+
+    document.getElementById('next-month').addEventListener('click', function () {
+      currentMonth.setMonth(currentMonth.getMonth() + 1);
+      generateCalendar();
+    });
+
+    generateCalendar();
+  </script>
+</body>
+
+</html>

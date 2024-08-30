@@ -1,0 +1,54 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#a1 {
+
+  margin-left: 25%;
+
+}
+
+.header {
+  text-align: center;
+  height: 10%;
+  background-color: #236F51;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  position: sticky;
+  top: 0;
+}
+
+.btn-part {
+  text-align: center;
+  position: relative;
+  margin-top: -40%;
+
+}
+
+#first,
+#second {
+  padding: 15px 20px 15px 20px;
+  margin: 20px;
+  width: 35%;
+  border-radius: 30px;
+
+}
+
+#first {
+  background-color: #236F51;
+  color: white;
+
+
+}
+
+#second {
+  background-color: white;
+  color: #236F51;
+}
+
+.title {
+  color: #236F51;
+  text-align: center;
+
+}
